@@ -1,0 +1,52 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout your repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Python (for Lambda packaging + Cypress if needed)
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      # 3️⃣ Build Lambda (zip it)
+      - name: Build Lambda package
+        run: |
+          cd lambda
+          zip -r ../lambda.zip .
+          cd ..
+
+      # 4️⃣ Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # 5️⃣ Terraform Init
+      - name: Terraform Init
+        run: terraform init
+        working-directory: terraform
+
+      # 6️⃣ Terraform Apply
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: terraform
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-west-2
+
+      # 7️⃣ Run Cypress smoke tests
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          command: npm run cypress:run
