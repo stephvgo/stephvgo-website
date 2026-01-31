@@ -1,0 +1,13 @@
+{
+  "name": "static-site-web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npx serve .",
+    "cypress:run": "cypress run"
+  },
+  "devDependencies": {
+    "cypress": "^15.9.0",
+    "serve": "^14.2.4"
+  }
+}

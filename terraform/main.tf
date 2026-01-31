@@ -70,24 +70,30 @@ resource "aws_dynamodb_table" "visitor_count" {
 
 #iam role for lambda
 resource "aws_iam_role" "lambda_role" {
-  name = "visitor-count-role"
+  name = "visitor-count-role-60ke0cde"
+  path = "/service-role/"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = {
-        Service = "lambda.amazonaws.com"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
       }
-      Action = "sts:AssumeRole"
-    }]
+    ]
   })
+
+  max_session_duration = 3600
 }
+
 
 #basic lambda execution policy
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
   role       = aws_iam_role.lambda_role.name 
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"  # AWS managed policy
+  policy_arn = "arn:aws:iam::618039746041:policy/service-role/AWSLambdaBasicExecutionRole-5091f453-9011-4ee3-968b-26c4184258a5"
 }
 
 #custom iam policy so lambda can write to dynamodb table
