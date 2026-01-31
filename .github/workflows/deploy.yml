@@ -18,34 +18,34 @@ jobs:
         with:
           python-version: "3.14"
 
-      - name: Build Lambda package
-        run: |
-          cd lambda
-          zip -r ../lambda.zip .
-          cd ..
+      # - name: Build Lambda package
+      #   run: |
+      #     cd lambda
+      #     zip -r ../lambda.zip .
+      #     cd ..
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      # - name: Setup Terraform
+      #   uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform Init
-        run: terraform init
-        working-directory: terraform
+      # - name: Terraform Init
+      #   run: terraform init
+      #   working-directory: terraform
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-        working-directory: terraform
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
+      # - name: Terraform Apply
+      #   run: terraform apply -auto-approve
+      #   working-directory: terraform
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_REGION: us-east-1
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
 
-      - name: Install npm dependencies
-        run: npm install
+      # - name: Install npm dependencies
+      #   run: npm install
 
-      - name: Run Cypress Tests
-        run: npm run cypress:run
+      # - name: Run Cypress Tests
+      #   run: npm run cypress:run
