@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hello, infra</title>
+  <title>hello.</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -11,22 +11,22 @@
     <h1>hello.</h1>
 
     <p class="subtitle">
-      this site is managed with infrastructure as code. here i will someday write up something else.
+      this site is managed with infrastructure as code.
     </p>
 
     <section class="card">
       <h2>stack</h2>
       <ul>
-        <li>terraform</li>
-        <li>cloud storage + cdn</li>
-        <li>ci/cd via github actions</li>
+        <li>s3 - static hosting</li>
+        <li>lambda + dynamodb - handles visitor counter</li>
+        <li>terraform - iac</li>
+        <li>github actions - ci/cd + automated cypress testing</li>
       </ul>
     </section>
 
     <section class="card">
-      <h2>status</h2>
-      <p>✅ deployed successfully</p>
-      <p>👀 visitors: <span id="visitor-count">loading...</span></p>
+      <h2>visitor counter</h2>
+      <p>you are visitor number <span id="visitor-count">loading...</span></p>
     </section>
 
     <footer>

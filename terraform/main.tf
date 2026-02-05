@@ -130,6 +130,12 @@ resource "aws_lambda_function" "visitor_counter" {
 resource "aws_apigatewayv2_api" "http_api" {
   name          = "visitor-count-api"
   protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["POST"]
+    allow_headers = ["*"]
+  }
 }
 
 #integration: connection api gateway to lambda
@@ -152,6 +158,11 @@ resource "aws_apigatewayv2_stage" "dev" {
   api_id      = aws_apigatewayv2_api.http_api.id
   name        = "dev"
   auto_deploy = true
+
+  default_route_settings {
+    throttling_burst_limit = 50
+    throttling_rate_limit  = 20
+  }
 }
 
 # lambda permission for api gateway to call on lambda
