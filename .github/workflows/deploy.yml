@@ -55,9 +55,11 @@ jobs:
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh
+          export PATH=$HOME/.local/bin:$PATH
 
       - name: Generate SBOM
         run: |
+          export PATH=$HOME/.local/bin:$PATH
           syft . -o json > sbom.json
 
       - name: Scan with Grype
