@@ -50,6 +50,34 @@ jobs:
 
       - name: Install npm dependencies
         run: npm install
+      
+      - name: Run Tests
+        run: npm tests
+
+      - name: Install Syft and Gripe
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh
+
+      - name: Generate SBOM
+        run: |
+          syft . -o json > sbom.json
+
+      - name: Scan with Grype
+        run: |
+          grype sbom:sbom.json -o json | tee grype-report.json
+          if grep -q '"severity": "Critical"\|"severity": "High"' grype-report.json; then
+              echo "High or Critical vulnerability found! Failing build."
+              exit 1
+          fi
+
+      - name: Upload SBOM and Grype report
+        uses: actions/upload-artifact@v3
+        with:
+          name: sbom-grype
+          path: |
+            sbom.json
+            grype-report.json
 
       - name: Run Cypress Tests
         run: npm run cypress:run
