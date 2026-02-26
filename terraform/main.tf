@@ -1,3 +1,18 @@
+# locals: render the index.html with the API URL
+locals {
+  index_html = templatefile("${path.module}/site/index.html", {
+    api_url = "${aws_apigatewayv2_stage.dev.invoke_url}/count"
+  })
+}
+
+# S3 object for index.html
+resource "aws_s3_object" "index" {
+  bucket       = aws_s3_bucket.website_bucket.id
+  key          = "index.html"
+  content      = local.index_html
+  content_type = "text/html"
+}
+
 #s3 bucket
 resource "aws_s3_bucket" "website_bucket" {
   bucket = "steph-vgo-website"
@@ -23,10 +38,14 @@ resource "aws_s3_bucket_website_configuration" "website" {
   index_document {
     suffix = "index.html"
   }
+}
 
-  error_document {
-    key = "error.html"
-  }
+# website css
+resource "aws_s3_object" "css" {
+  bucket       = aws_s3_bucket.website_bucket.id
+  key          = "styles.css"          # path in S3
+  source       = "site/styles.css"     # local file path
+  content_type = "text/css"
 }
 
 # website public access
@@ -133,7 +152,7 @@ resource "aws_apigatewayv2_api" "http_api" {
 
   cors_configuration {
     allow_origins = ["*"]
-    allow_methods = ["POST"]
+    allow_methods = ["POST", "OPTIONS"]
     allow_headers = ["*"]
   }
 }
