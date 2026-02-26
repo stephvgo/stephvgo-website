@@ -16,6 +16,7 @@ resource "aws_s3_object" "index" {
 #s3 bucket
 resource "aws_s3_bucket" "website_bucket" {
   bucket = "steph-vgo-website"
+  force_destroy = true
 
   tags = {
     Name = "steph-vgo-website"
